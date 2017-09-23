@@ -1,0 +1,20 @@
+# Created by .ignore support plugin (hsz.mobi)
+将删除 .gitignore
+将删除 .idea/
+将删除 cmake-build-debug/
+将删除 CMakeCache.txt
+将删除 CMakeFiles/
+将删除 Common/CMakeFiles/
+将删除 Common/Makefile
+将删除 Common/cmake_install.cmake
+将删除 Makefile
+将删除 cmake_install.cmake
+将删除 study/HelloWorld/CMakeFiles/
+将删除 study/HelloWorld/Makefile
+将删除 study/HelloWorld/cmake_install.cmake
+将删除 Common/libCommon.a
+将删除 study/HelloWorld/Hello_World
+.idea/
+study/HelloWorld
+Common/CMakeFiles/
+cmake-build-debug/
