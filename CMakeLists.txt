@@ -1,5 +1,5 @@
 cmake_minimum_required( VERSION 2.6 )
-project( ES3_Book )
+project( opengles )
 
 include_directories( External/Include )
 include_directories( Common/Include )
