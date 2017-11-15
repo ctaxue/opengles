@@ -9,4 +9,5 @@ find_library( EGL_LIBRARY EGL "EGL 1.4 library" )
  
 SUBDIRS( Common
         study/HelloWorld
-        study/vertexArray)
+        study/vertexArray
+        study/vertexArrayWithVbo)
