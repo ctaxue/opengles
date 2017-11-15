@@ -151,8 +151,10 @@ void DrawPrimitiveWithVBOs(ESContext *esContext,
 
     glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER, userData->vboIds[2] );
 
+
+
     glDrawElements ( GL_TRIANGLES, numIndices,
-                     GL_UNSIGNED_SHORT, 0 );
+                     GL_UNSIGNED_SHORT, (const void *)(0 + sizeof(GLushort)) );
 
     glDisableVertexAttribArray ( VERTEX_POS_INDX );
     glDisableVertexAttribArray ( VERTEX_COLOR_INDX );
@@ -173,17 +175,19 @@ void Draw(ESContext *esContext)
     UserData *userData = esContext->userData;
 
     // 3 vertices, with (x,y,z) ,(r, g, b, a) per-vertex
-    GLfloat vertexPos[3 * VERTEX_POS_SIZE] =
+    GLfloat vertexPos[4 * VERTEX_POS_SIZE] =
             {
                     0.0f,  0.5f, 0.0f,        // v0
                     -0.5f, -0.5f, 0.0f,        // v1
-                    0.5f, -0.5f, 0.0f         // v2
+                    0.5f, -0.5f, 0.0f,        // v2
+                    0.0f,  1.0f, 0.0f         // v3
             };
     GLfloat color[4 * VERTEX_COLOR_SIZE] =
             {
                     1.0f, 0.0f, 0.0f, 1.0f,   // c0
                     0.0f, 1.0f, 0.0f, 1.0f,   // c1
-                    0.0f, 0.0f, 1.0f, 1.0f    // c2
+                    0.0f, 0.0f, 1.0f, 1.0f,    // c2
+                    1.0f, 0.0f, 0.0f, 1.0f    // c3
             };
     GLint vtxStrides[2] =
             {
@@ -192,15 +196,15 @@ void Draw(ESContext *esContext)
             };
 
     // Index buffer data
-    GLushort indices[3] = { 0, 1, 2 };
+    GLushort indices[4] = { 0, 1, 2, 3 };
     GLfloat *vtxBuf[2] = { vertexPos, color };
 
     glViewport ( 0, 0, esContext->width, esContext->height );
     glClear ( GL_COLOR_BUFFER_BIT );
     glUseProgram ( userData->programObject );
 
-    DrawPrimitiveWithVBOs ( esContext, 3, vtxBuf,
-                            vtxStrides, 3, indices );
+    DrawPrimitiveWithVBOs ( esContext, 4, vtxBuf,
+                            vtxStrides, 4, indices );
 }
 
 void Shutdown(ESContext *esContext)
