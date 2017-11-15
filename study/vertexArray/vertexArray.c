@@ -154,21 +154,19 @@ void Draw(ESContext *esContext)
 
 
 
-    GLfloat color[4*3] =
-            {
-                    1.0f, 0.0f, 0.0f, 1.0f ,
-                    0.0f, 1.0f, 0.0f, 1.0f,
-                    0.0f, 0.0f, 1.0f, 1.0f
-            };
+    #define VERTEX_POS_SIZE  3  //x y z
+    #define VERTEX_COLOR_SIZE 4 //r g b a
 
-    // 3 vertices, with (x,y,z) per-vertex
-    GLfloat vertexPos[3 * 3] =
-            {
-                    0.0f,  0.5f, 0.0f, // v0
-                    -0.5f, -0.5f, 0.0f, // v1
-                    0.5f, -0.5f, 0.0f  // v2
-            };
+    GLfloat input[4*3 + 3*3] = {
+            0.0f,  0.5f, 0.0f, // v0
+            1.0f, 0.0f, 0.0f, 1.0f ,
 
+            -0.5f, -0.5f, 0.0f, // v1
+            0.0f, 1.0f, 0.0f, 1.0f,
+
+            0.5f, -0.5f, 0.0f,  // v2
+            0.0f, 0.0f, 1.0f, 1.0f
+    };
 
     glViewport ( 0, 0, esContext->width, esContext->height );
 
@@ -177,13 +175,16 @@ void Draw(ESContext *esContext)
     glUseProgram ( userData->programObject );
 
 
-    //color
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, color);
-    glEnableVertexAttribArray ( 1 );
-
-    glVertexAttribPointer ( 0, 3, GL_FLOAT, GL_FALSE, 0, vertexPos );
+    //pos
+    glVertexAttribPointer ( 0, 3, GL_FLOAT, GL_FALSE, (VERTEX_POS_SIZE + VERTEX_COLOR_SIZE)*sizeof(GLfloat), input );
     glEnableVertexAttribArray ( 0 );
+
+    //color
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, (VERTEX_POS_SIZE + VERTEX_COLOR_SIZE)*sizeof(GLfloat), input + 3);
+    glEnableVertexAttribArray ( 1 );
     //glVertexAttrib4fv ( 1, color );
+
+
 
 
     glDrawArrays ( GL_TRIANGLES, 0, 3 );
