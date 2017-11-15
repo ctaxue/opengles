@@ -100,25 +100,6 @@ int init(ESContext *esContext)
     char *fShaderStr = file2str("simple_fragment_shader.glsl");
 
 
-
-    /*char vShaderStr[] =
-            "#version 300 es                          \n"
-            "layout(location = 0) in vec4 vPosition;  \n"
-            "void main()                              \n"
-            "{                                        \n"
-            "   gl_Position = vPosition;              \n"
-            "}                                        \n";
-
-    char fShaderStr[] =
-            "#version 300 es                              \n"
-            "precision mediump float;                     \n"
-            "out vec4 fragColor;                          \n"
-            "void main()                                  \n"
-            "{                                            \n"
-            "   fragColor = vec4 ( 1.0, 0.0, 1.0, 1.0 );  \n"
-            "}                                            \n";
-    */
-
     GLuint vertexShader;
     GLuint fragmentShader;
     GLuint programObject;
@@ -164,27 +145,21 @@ int init(ESContext *esContext)
 
 }
 
-float height = 1;
 
 void Draw(ESContext *esContext)
 {
-    clock_t t = clock();
-    long sec = t ;
-    sec = t % 255;
-    height++;
-    //printf ( "sec is: %ld\n",sec);
+
 
     UserData *userData = esContext->userData;
-    GLfloat indexColor =(GLfloat)t;
-
-    float tt = sec;
-    float ff = (float) (tt / 255.0);
-    GLfloat indexColor2 = (GLfloat) (1.0 - ff );
-    printf ( "sec is: %f\n",ff);
 
 
 
-    GLfloat color[4] = { 1.0f - indexColor2 , indexColor2, indexColor2, 1.0f };
+    GLfloat color[4*3] =
+            {
+                    1.0f, 0.0f, 0.0f, 1.0f ,
+                    0.0f, 1.0f, 0.0f, 1.0f,
+                    0.0f, 0.0f, 1.0f, 1.0f
+            };
 
     // 3 vertices, with (x,y,z) per-vertex
     GLfloat vertexPos[3 * 3] =
@@ -195,21 +170,26 @@ void Draw(ESContext *esContext)
             };
 
 
-    esContext->height = height;
     glViewport ( 0, 0, esContext->width, esContext->height );
 
     glClear ( GL_COLOR_BUFFER_BIT );
 
     glUseProgram ( userData->programObject );
 
+
+    //color
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, color);
+    glEnableVertexAttribArray ( 1 );
+
     glVertexAttribPointer ( 0, 3, GL_FLOAT, GL_FALSE, 0, vertexPos );
     glEnableVertexAttribArray ( 0 );
-    glVertexAttrib4fv ( 1, color );
+    //glVertexAttrib4fv ( 1, color );
 
 
     glDrawArrays ( GL_TRIANGLES, 0, 3 );
 
     glDisableVertexAttribArray ( 0 );
+    glDisableVertexAttribArray ( 1 );
 }
 
 void Shutdown(ESContext *esContext)
@@ -237,17 +217,9 @@ int esMain(ESContext *esContext)
     //esRegisterUpdateFunc ( esContext,Update);
 
     GLint maxVertexAttribs; // n will be >= 8
-    //glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttribs);
 
     UserData *userData = esContext->userData;
     glGetProgramiv(userData->programObject, GL_ACTIVE_ATTRIBUTES, &maxVertexAttribs);
     printf("the result is %d\n", maxVertexAttribs);
     return GL_TRUE;
 }
-
-/*
-void ESUTIL_API esRegisterUpdateFunc ( ESContext *esContext, void ( ESCALLBACK *updateFunc ) ( ESContext *, float ) )
-{
-    esContext->updateFunc = updateFunc;
-}
-*/

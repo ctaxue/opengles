@@ -13,8 +13,9 @@
 将删除 study/HelloWorld/Makefile
 将删除 study/HelloWorld/cmake_install.cmake
 将删除 Common/libCommon.a
-将删除 study/HelloWorld/Hello_World
 .idea/
-study/HelloWorld
+study/HelloWorld/CMakeFiles
+study/HelloWorld/cmake_install.cmake
+study/HelloWorld/Makefile
 Common/CMakeFiles/
 cmake-build-debug/

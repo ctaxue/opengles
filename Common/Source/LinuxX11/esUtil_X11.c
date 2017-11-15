@@ -181,7 +181,7 @@ void WinLoop ( ESContext *esContext )
 
         clock_t t = clock();
         long sec = t ;
-        //printf ( "time is: %ld\n", sec );
+//        printf ( "time is: %ld\n", sec );
     }
 }
 
