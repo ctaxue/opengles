@@ -33,7 +33,7 @@
 //
 //    This example demonstrates using client-side vertex arrays
 //    and a constant vertex attribute
-//
+//https://blog.csdn.net/Blues1021/article/details/51460498
 #include <stdio.h>
 #include "esUtil.h"
 #define VERTEX_POS_SIZE       3 // x, y and z
@@ -94,6 +94,12 @@ int Init ( ESContext *esContext )
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, userData->vboIds[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof ( indices ), indices, GL_STATIC_DRAW);
 
+    //一个VAO有多个VBO，它们之间也是通过上下文，只有唯一的激活VAO，在VAO后创建的VBO都属于该VAO
+    /*1. Generate Vertex Array Object
+    2. Bind Vertex Array Object
+
+    3. Generate Vertex Buffer Object
+    4. Bind Vertex Buffer Object*/
     glGenVertexArrays(1, userData->vaoId);
     glBindVertexArray(userData->vaoId);
     glBindBuffer(GL_ARRAY_BUFFER, userData->vboIds[0]);
@@ -130,7 +136,8 @@ void Draw( ESContext *esContext){
 void Shutdown ( ESContext *esContext )
 {
     UserData *userData = esContext->userData;
-
+    glDeleteVertexArrays(1, userData->vaoId); // 引用的VBO会变成未绑定的，但不会删除VBO数据块
+    glDeleteBuffers(2, userData->vboIds); // 删除VBO缓存区数据块
     glDeleteProgram ( userData->programObject );
     glDeleteBuffers ( 3, userData->vboIds );
 }
