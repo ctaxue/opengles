@@ -11,7 +11,7 @@
 
 // esUtil_X11.c
 //
-//    This file contains the LinuxX11 implementation of the windowing functions. 
+//    This file contains the LinuxX11 implementation of the windowing functions.
 
 ///
 // Includes
@@ -27,6 +27,11 @@
 #include  <X11/Xatom.h>
 #include  <X11/Xutil.h>
 #include<time.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 // X11 related local variables
 static Display *x_display = NULL;
 static Atom s_wmDeleteMessage;
@@ -43,6 +48,47 @@ static Atom s_wmDeleteMessage;
 //  Public Functions
 //
 //
+
+char* file2str(const char *pathname)
+{
+    int fd;
+    if((fd=open(pathname, O_RDONLY)) == -1)
+    {
+        perror(pathname);
+        return NULL;
+    }
+
+    char *buf = NULL;
+    buf = malloc(0);
+    size_t count = 0, n = 0;//count:real number
+
+    do
+    {
+        buf = realloc(buf, count + 512);
+        n = read(fd, buf + count, 512);//each 512
+
+        if(n < 0)//ERROR?
+        {
+            free(buf);
+            buf= NULL;
+        }
+
+        count += n;
+
+    }while((n < 512) && (n > 0));
+
+    close(fd);
+
+    if(buf)
+    {
+        if (0 == (count + 1) % 512)
+        {
+            buf = realloc(buf, count + 1);
+        }
+        buf[count] = '\0';
+    }
+    return buf;
+}
 
 ///
 //  WinCreate()
@@ -199,13 +245,13 @@ extern int esMain( ESContext *esContext );
 int main ( int argc, char *argv[] )
 {
    ESContext esContext;
-   
+
    memset ( &esContext, 0, sizeof( esContext ) );
 
 
    if ( esMain ( &esContext ) != GL_TRUE )
-      return 1;   
- 
+      return 1;
+
    WinLoop ( &esContext );
 
    if ( esContext.shutdownFunc != NULL )

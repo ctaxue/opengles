@@ -1,2 +1,2 @@
-add_executable( vertexArrayWithVbo vertexArrayVbo.c)
+add_executable( vertexArrayWithVbo VertexBufferObjects.c)
 target_link_libraries( vertexArrayWithVbo Common )

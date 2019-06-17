@@ -140,6 +140,8 @@ struct ESContext
 //  Public Functions
 //
 
+char* file2str(const char *pathname);
+
 //
 /// \brief Create a window with the specified parameters
 /// \param esContext Application context

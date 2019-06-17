@@ -16,46 +16,6 @@ typedef struct {
     ESMatrix  mvpMatrix;
 } UserData;
 
-char* file2str(const char *pathname)
-{
-    int fd;
-    if((fd=open(pathname, O_RDONLY)) == -1)
-    {
-        perror(pathname);
-        return NULL;
-    }
-
-    char *buf = NULL;
-    buf = malloc(0);
-    size_t count = 0, n = 0;//count:real number
-
-    do
-    {
-        buf = realloc(buf, count + 512);
-        n = read(fd, buf + count, 512);//each 512
-
-        if(n < 0)//ERROR?
-        {
-            free(buf);
-            buf= NULL;
-        }
-
-        count += n;
-
-    }while((n < 512) && (n > 0));//n < 512肯定读完了
-
-    close(fd);
-
-    if(buf)
-    {
-        if (0 == (count + 1) % 512)//几率很小的溢出
-        {
-            buf = realloc(buf, count + 1);
-        }
-        buf[count] = '\0';
-    }
-    return buf;
-}
 
 
 GLuint LoadShader(GLenum type, const char *shaderSrc)
